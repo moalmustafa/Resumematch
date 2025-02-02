@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Resume Matcher</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        textarea, input { width: 80%; margin: 10px 0; padding: 10px; }
+        button { padding: 10px 15px; cursor: pointer; }
+        #result { margin-top: 20px; font-weight: bold; white-space: pre-wrap; text-align: left; width: 80%; margin: auto; }
+    </style>
+</head>
+<body>
+    <h2>AI Resume Matcher</h2>
+    <textarea id="jobPost" placeholder="Paste Job Description here..." rows="6"></textarea>
+    <br>
+    <textarea id="resume" placeholder="Paste Your Resume here..." rows="6"></textarea>
+    <br>
+    <button onclick="matchResume()">Generate Matching Resume</button>
+    <p id="status"></p>
+    <pre id="result"></pre>
+
+    <script>
+        async function matchResume() {
+            const jobPost = document.getElementById("jobPost").value;
+            const resume = document.getElementById("resume").value;
+
+            if (!jobPost || !resume) {
+                alert("Please enter both Job Description and Resume.");
+                return;
+            }
+
+            document.getElementById("status").innerText = "Processing...";
+
+            const response = await fetch("https://your-vercel-api.vercel.app/api/match", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ jobPost, resume })
+            });
+
+            const data = await response.json();
+            document.getElementById("status").innerText = "";
+            document.getElementById("result").innerText = data.matchingResume;
+        }
+    </script>
+</body>
+</html>
